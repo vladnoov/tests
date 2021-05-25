@@ -1,0 +1,54 @@
+#include<iostream>
+#include<string>
+#define en "\n";
+using namespace std;
+
+struct Joke {
+	Joke(string s_ = "default_joke") {
+		this->s = s_;
+	};
+	string s; // contains joke
+
+	~Joke() {};
+	Joke operator=(const string& rv) {
+		return (this->s = rv);
+	}
+	Joke operator=(const Joke& rv) {
+		return (this->s = rv.s);
+	}
+};
+
+class Meme {
+private:
+	Joke joke;
+public:
+	void setJoke(Joke newJoke) {
+		this->joke = newJoke;
+	}
+};
+
+class kek {
+public:
+	Joke joke;
+};
+
+Joke &get_private_joke(Meme &kekw) {
+	void* voidptr = static_cast<void*>(&kekw);
+	class kek * p = static_cast<kek*>(voidptr);
+	return p->joke;
+}
+
+int main() {
+	Joke kekw("looool"), myjoke;
+	myjoke = "my_joke";
+	cout <<"kekw = " <<kekw.s <<"\t myjoke = "<< myjoke.s << en;
+
+	Meme a;
+	a.setJoke(myjoke);
+	myjoke = "";
+	myjoke = get_private_joke(a);
+	cout <<"get a private field : " << myjoke.s << en;
+
+	get_private_joke(a) = kekw;
+	cout << "set a private field : "<< get_private_joke(a).s << en;
+}
