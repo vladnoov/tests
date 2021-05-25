@@ -1,0 +1,84 @@
+#include<iostream>
+#include<vector>
+#define en << '\n';
+
+using namespace std;
+using ll = long long;
+
+class num {
+	
+public:
+	int f = 1, d = 2;
+	char c = 'c';
+
+	void set(int a1) {
+		this->a = a1;
+		this->b = -a1;
+	}
+	void print() {
+		cout << this->a en;
+	}
+	int foo() {
+		return 1;
+	}
+private:
+	long long a;
+public:
+	bool z = 1;
+	int b = 1;;
+};
+
+class num1 {
+public:
+	int f, d;
+	char c;
+	ll a;
+	int z;
+};
+
+ll  &get_(num & rv) {
+	void * voidptr = static_cast<void*>(&rv);
+	num1 *ptr = static_cast<num1*>(voidptr);
+	return ptr->a;
+}
+
+int main() {
+	num a;
+	char &cc = a.c;
+	int &d = a.d, &f = a.f;
+	bool &z = a.z; // now i can read and change public fields w/o set()
+	f = 2;
+
+	//cout << a.f en;
+	//cout << (int*)&a.f << " " << (int*)&d << " " << (int*)&cc << " " << (int*)&a.z  en;
+	//010FFDA8 010FFDAC 010FFDB0 010FFDBC
+	// f			d		c		z
+	//	c > d
+	//	z > c, z > d
+	//	d > f ->
+	//	f d  c z
+	//	
+	// after sorting can find dif between neighbours ::
+	//cout << (int*)&d - (int*)&a.f << " " << (int*)&cc - (int*)&d << " " << (int*)&a.z - (int*)&cc << " " << (int*)&a.z  en;
+	//				1									1							3
+	//то есть сущесствуют еще 8 байт разницы , т к я вывожу разницу в типах инт, 
+	//это 4 байта в системе, можно проверить , выполнив size of int
+	// на самом деле тут уже можно начать подбирать, т к тип текущей переменной влияет только на адреса следующих после нее.
+	// далее можно попрбовать перебирать тип переменной c , чтобы она занимала от 1 до 8 байт и смотреть, что выходит
+	// проще всего написать для этого шаблон
+	a.set(10);
+	
+	ll  c = 2;
+	a.print();
+	c = get_(a);
+	cout << c en;
+	//c = 10;
+	get_(a) = c;
+	a.print();
+
+}
+
+
+
+
+
